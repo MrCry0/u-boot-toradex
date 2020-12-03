@@ -844,6 +844,16 @@ int disable_dsp_nodes(void *blob)
 	return disable_fdt_nodes(blob, nodes_path_8mp, ARRAY_SIZE(nodes_path_8mp));
 }
 
+static int fdt_setprop_array_u32(void *fdt, int nodeoffset, const char *name,
+                const void *val, int len)
+{
+	int i;
+	int *a_array = (int *)val;
+	for (i = 0; i < (len); i++)
+		a_array[i] = cpu_to_fdt32(a_array[i]);
+	return fdt_setprop(fdt, nodeoffset, name, val, len * 4);
+}
+
 static int disable_cpu_nodes(void *blob, u32 disabled_cores)
 {
 	const char *nodes_path[] = {
@@ -851,10 +861,15 @@ static int disable_cpu_nodes(void *blob, u32 disabled_cores)
 			"/cpus/cpu@2",
 			"/cpus/cpu@3",
 	};
-
-	u32 i = 0;
+	const char *cooling_phandles =
+		"/thermal-zones/cpu-thermal/cooling-maps/map0";
+	const char *pmu_phandles = "/pmu";
 	int rc;
 	int nodeoff;
+	u32 i, k, n, num_elements;
+	u32 del_phandles[3] = {0,0,0};
+	/* assume a maximum of 16 entries in the cooling devices property */
+	u32 a_property[3 * 16];
 
 	if (disabled_cores > 3)
 		return -EINVAL;
@@ -866,6 +881,8 @@ static int disable_cpu_nodes(void *blob, u32 disabled_cores)
 		if (nodeoff < 0)
 			continue; /* Not found, skip it */
 
+		del_phandles[i] = fdt_get_phandle(blob, nodeoff);
+
 		rc = fdt_del_node(blob, nodeoff);
 		if (rc < 0) {
 			printf("Unable to delete node %s, err=%s\n",
@@ -873,6 +890,46 @@ static int disable_cpu_nodes(void *blob, u32 disabled_cores)
 		} else {
 			printf("Delete node %s\n", nodes_path[i]);
 		}
+	}
+
+	/* We delete CPU nodes above, but phandles to these nodes are still in the fdt */
+	/* Delete tho phandles in the cooling-device property */
+	nodeoff = fdt_path_offset(blob, cooling_phandles);
+	if (nodeoff >= 0) {
+		num_elements = fdtdec_get_int_array_count(blob, nodeoff, "cooling-device",
+			a_property, ARRAY_SIZE(a_property));
+		for (i = 0; i < 3; i++) {
+			for (k = num_elements; k > 0; ) {
+				k -= 3;
+				if (del_phandles[i] == a_property[k]) {
+					for (n = k; n < (num_elements - 1); n++)
+						a_property[n] = a_property[n + 3];
+					num_elements -= 3;
+					debug("deleting cpu[%i] reference\n", i+1);
+				}
+			}
+		}
+		debug("cooling-device property has now %i elements\n", num_elements);
+		fdt_setprop_array_u32(blob, nodeoff, "cooling-device", a_property, num_elements);	}
+
+	/* Delete tho phandles in the interrupt-affinity property */
+	nodeoff = fdt_path_offset(blob, pmu_phandles);
+	if (nodeoff >= 0) {
+		num_elements = fdtdec_get_int_array_count(blob, nodeoff, "interrupt-affinity",
+			a_property, ARRAY_SIZE(a_property));
+		for (i = 0; i < 3; i++) {
+			for (k = num_elements; k > 0; ) {
+				k--;
+				if (del_phandles[i] == a_property[k]) {
+					for (n = k; n < (num_elements - 1); n++)
+						a_property[n] = a_property[n + 1];
+					num_elements--;
+					debug("deleting cpu[%i] reference\n", i+1);
+				}
+			}
+		}
+		debug("interrupt-affinity property has now %i elements\n", num_elements);
+		fdt_setprop_array_u32(blob, nodeoff, "interrupt-affinity", a_property, num_elements);
 	}
 
 	return 0;
