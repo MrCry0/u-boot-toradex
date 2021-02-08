@@ -52,6 +52,11 @@
 #ifdef CONFIG_DWC_ETH_QOS
 #define CONFIG_SYS_NONCACHED_MEMORY	(1 * SZ_1M) /* 1M */
 #endif
+
+#define CONFIG_IPADDR			192.168.10.2
+#define CONFIG_NETMASK			255.255.255.0
+#define CONFIG_SERVERIP			192.168.10.1
+#define CONFIG_ROOTPATH			"/srv/nfs"
 #endif /* CONFIG_CMD_NET */
 
 #define MEM_LAYOUT_ENV_SETTINGS \
