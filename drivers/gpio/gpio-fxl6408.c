@@ -351,6 +351,9 @@ static int fxl6408_probe(struct udevice *dev)
 	dev_dbg(dev, "%s (FW rev. %ld) is ready\n", str,
 		FXL6408_FW_REV(info->device_id));
 
+	dev_info(dev, "%s (FW rev. %ld) is ready\n", str,
+		FXL6408_FW_REV(info->device_id));
+
 	return 0;
 }
 
