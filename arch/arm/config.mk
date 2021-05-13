@@ -164,10 +164,14 @@ ifndef CONFIG_SPL_BUILD
 INPUTS-y += SPL
 endif
 else
+ifeq ($(CONFIG_IMX_NAND),y)
+ALL-y += u-boot-nand.imx
+else
 ifeq ($(CONFIG_OF_SEPARATE),y)
 INPUTS-y += u-boot-dtb.imx
 else
 INPUTS-y += u-boot.imx
+endif
 endif
 endif
 ifneq ($(CONFIG_VF610),)
