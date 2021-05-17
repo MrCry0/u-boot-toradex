@@ -24,6 +24,7 @@
 #define CONFIG_IPADDR			192.168.10.2
 #define CONFIG_NETMASK			255.255.255.0
 #define CONFIG_SERVERIP			192.168.10.1
+#define CONFIG_ROOTPATH			"/srv/nfs"
 
 #define MEM_LAYOUT_ENV_SETTINGS \
 	"fdt_addr_r=0x83000000\0" \
