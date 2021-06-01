@@ -264,6 +264,7 @@ static int fxl6408_probe(struct udevice *dev)
 	u8 val;
 	u32 val32;
 
+	dev_dbg(dev, "%s: Enter\n", __func__);
 	addr = dev_read_addr(dev);
 	if (addr == 0)
 		return -ENODEV;

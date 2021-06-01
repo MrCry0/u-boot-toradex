@@ -3,6 +3,8 @@
  * Copyright 2016 Freescale Semiconductors, Inc.
  */
 
+#define DEBUG
+
 #include <common.h>
 #include <errno.h>
 #include <log.h>
