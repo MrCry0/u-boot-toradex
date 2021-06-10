@@ -126,7 +126,9 @@ u-boot.imx: u-boot.bin u-boot.cfgout $(PLUGIN).bin FORCE
 
 ifeq ($(CONFIG_IMX_NAND),y)
 cmd_u-boot-nand_imx = (dd bs=1024 count=1 if=/dev/zero 2>/dev/null) | \
-	cat - $< > $@
+	cat - $< > u-boot.imx.padded && \
+	(dd bs=10k count=1 if=/dev/zero 2>/dev/null) | \
+	cat u-boot.imx.padded - > $@ && rm u-boot.imx.padded
 
 u-boot-nand.imx: u-boot.imx FORCE
 	$(call if_changed,u-boot-nand_imx)
