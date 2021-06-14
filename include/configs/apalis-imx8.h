@@ -85,13 +85,20 @@
 #define FDT_FILE			"imx8qm-apalis-v1.1-eval.dtb"
 #define FDT_FILE_V1_0			"imx8qm-apalis-eval.dtb"
 
+#if defined(CONFIG_TDX_EASY_INSTALLER)
+#  define BOOT_SCRIPT	"boot-tezi.scr"
+#else
+#  define BOOT_SCRIPT	"boot.scr"
+#endif
+
 /* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	AHAB_ENV \
 	BOOTENV \
 	M4_BOOT_ENV \
 	MEM_LAYOUT_ENV_SETTINGS \
-	"boot_script_dhcp=boot.scr\0" \
+	"boot_scripts=" BOOT_SCRIPT "\0" \
+	"boot_script_dhcp=" BOOT_SCRIPT "\0" \
 	"bootcmd_mfg=select_dt_from_module_version && fastboot 0\0" \
 	"boot_file=Image\0" \
 	"console=ttyLP1 earlycon\0" \

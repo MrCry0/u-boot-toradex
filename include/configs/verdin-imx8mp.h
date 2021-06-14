@@ -82,6 +82,12 @@
 #define BOOTENV
 #endif
 
+#if defined(CONFIG_TDX_EASY_INSTALLER)
+#  define BOOT_SCRIPT	"boot-tezi.scr"
+#else
+#  define BOOT_SCRIPT	"boot.scr"
+#endif
+
 /* Initial environment variables */
 #define CONFIG_EXTRA_ENV_SETTINGS \
 	BOOTENV \
@@ -91,7 +97,8 @@
 	"fdt_board=dev\0" \
 	"initrd_addr=0x43800000\0" \
 	"initrd_high=0xffffffffffffffff\0" \
-	"boot_script_dhcp=boot.scr\0" \
+	"boot_scripts=" BOOT_SCRIPT "\0" \
+	"boot_script_dhcp=" BOOT_SCRIPT "\0" \
 	"boot_file=Image\0" \
 	"setup=setenv setupargs console=${console},${baudrate} console=tty1 consoleblank=0 earlycon\0"
 
