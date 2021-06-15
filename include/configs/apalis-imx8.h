@@ -93,7 +93,6 @@
 	MEM_LAYOUT_ENV_SETTINGS \
 	"boot_script_dhcp=boot.scr\0" \
 	"bootcmd_mfg=select_dt_from_module_version && fastboot 0\0" \
-	"script=boot.scr\0" \
 	"boot_file=Image\0" \
 	"console=ttyLP1 earlycon\0" \
 	"fdt_high=\0" \

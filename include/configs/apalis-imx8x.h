@@ -95,7 +95,6 @@
 	"mmcdev=" __stringify(CONFIG_SYS_MMC_ENV_DEV) "\0" \
 	"mmcpart=" __stringify(CONFIG_SYS_MMC_IMG_LOAD_PART) "\0" \
 	"panel=NULL\0" \
-	"script=boot.scr\0" \
 	"setup=run mmcargs\0" \
 	"update_uboot=askenv confirm Did you load u-boot-dtb.imx (y/N)?; " \
 		"if test \"$confirm\" = \"y\"; then " \
