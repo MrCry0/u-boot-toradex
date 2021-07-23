@@ -82,8 +82,10 @@
 #define AHAB_ENV "sec_boot=no\0"
 #endif
 
-#define FDT_FILE			"imx8qm-apalis-v1.1-eval.dtb"
-#define FDT_FILE_V1_0			"imx8qm-apalis-eval.dtb"
+#define FDT_FILE_IMX8QP         "imx8qp-apalis-v1.1-eval.dtb"
+#define FDT_FILE_IMX8QM		"imx8qm-apalis-v1.1-eval.dtb"
+#define FDT_FILE_IMX8QM_V1_0	"imx8qm-apalis-eval.dtb"
+
 
 #if defined(CONFIG_TDX_EASY_INSTALLER)
 #  define BOOT_SCRIPT	"boot-tezi.scr"
@@ -104,7 +106,7 @@
 	"console=ttyLP1 earlycon\0" \
 	"fdt_high=\0" \
 	"boot_fdt=try\0" \
-	"fdtfile=" FDT_FILE "\0" \
+	"fdtfile=" FDT_FILE_IMX8QM "\0" \
 	"finduuid=part uuid mmc ${mmcdev}:2 uuid\0" \
 	"hdp_file=hdmitxfw.bin\0" \
 	"loadhdp=${load_cmd} ${hdp_addr} ${hdp_file}\0" \

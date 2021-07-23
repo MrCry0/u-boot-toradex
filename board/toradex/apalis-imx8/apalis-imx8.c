@@ -221,22 +221,35 @@ static pcb_rev_t get_pcb_revision(void)
 
 static void select_dt_from_module_version(void)
 {
-	char *fdt_env = env_get("fdtfile");
+	int  board_revision = get_pcb_revision();
 
-	switch(get_pcb_revision()) {
-		case PCB_VERSION_1_0:
-			if (strcmp(FDT_FILE_V1_0, fdt_env)) {
-				env_set("fdtfile", FDT_FILE_V1_0);
-				printf("Detected a V1.0 module, setting " \
-					"correct devicetree\n");
-#ifndef CONFIG_ENV_IS_NOWHERE
-				env_save();
-#endif
-			}
+	/* Check For Apalis iMX8QP SKU */
+	switch (tdx_hw_tag.prodid) {
+		/* Select Apalis iMX8QM device trees */
+		case APALIS_IMX8QM_IT:
+		case APALIS_IMX8QM_WIFI_BT_IT:
+			if (board_revision != PCB_VERSION_1_0)
+				env_set("fdtfile", FDT_FILE_IMX8QM);
+			else
+				env_set("fdtfile", FDT_FILE_IMX8QM_V1_0);
 			break;
-		default:
+
+		/* Select Apalis iMX8QP device trees */
+		case APALIS_IMX8QP_WIFI_BT:
+		case APALIS_IMX8QP:
+			env_set("fdtfile", FDT_FILE_IMX8QP);
 			break;
+	default:
+		printf("Unknown Apalis iMX8 module\n");
+		return;
 	}
+
+	printf("Detected V%s  module, setting correct devicetree\n",
+	       (board_revision == PCB_VERSION_1_0) ? "1.0" : "1.1");
+
+#ifndef CONFIG_ENV_IS_NOWHERE
+	env_save();
+#endif
 }
 
 static int do_select_dt_from_module_version(cmd_tbl_t *cmdtp, int flag, int argc,
