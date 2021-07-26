@@ -244,9 +244,6 @@ static void select_dt_from_module_version(void)
 		return;
 	}
 
-	printf("Detected V%s  module, setting correct devicetree\n",
-	       (board_revision == PCB_VERSION_1_0) ? "1.0" : "1.1");
-
 #ifndef CONFIG_ENV_IS_NOWHERE
 	env_save();
 #endif
