@@ -221,23 +221,22 @@ static pcb_rev_t get_pcb_revision(void)
 
 static void select_dt_from_module_version(void)
 {
-	int  board_revision = get_pcb_revision();
-
-	/* Check For Apalis iMX8QP SKU */
 	switch (tdx_hw_tag.prodid) {
 		/* Select Apalis iMX8QM device trees */
 		case APALIS_IMX8QM_IT:
 		case APALIS_IMX8QM_WIFI_BT_IT:
-			if (board_revision != PCB_VERSION_1_0)
-				env_set("fdtfile", FDT_FILE_IMX8QM);
+			env_set("soc", "imx8qm");
+			if (get_pcb_revision() == PCB_VERSION_1_0)
+				env_set("variant", "");
 			else
-				env_set("fdtfile", FDT_FILE_IMX8QM_V1_0);
+				env_set("variant", "-v1.1");
 			break;
 
 		/* Select Apalis iMX8QP device trees */
 		case APALIS_IMX8QP_WIFI_BT:
 		case APALIS_IMX8QP:
-			env_set("fdtfile", FDT_FILE_IMX8QP);
+			env_set("soc", "imx8qp");
+			env_set("variant", "-v1.1");
 			break;
 	default:
 		printf("Unknown Apalis iMX8 module\n");
