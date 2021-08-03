@@ -236,13 +236,43 @@ static int fxl6408_xlate(struct udevice *dev, struct gpio_desc *desc,
 	return 0;
 }
 
+static int fxl6408_set_flags(struct udevice *dev, unsigned int offset,
+			     ulong flags) {
+	int ret;
+
+	/* IO_DIR = OUT */
+	if (flags & GPIOD_IS_OUT) {
+		bool value = flags & GPIOD_IS_OUT_ACTIVE;
+		/* Open Drain OR Open Source */
+		if (flags & GPIOD_MASK_DSTYPE)
+			/* set HIGH-Z to 1 */
+		else
+			/* set HIGH-Z to 0 */
+		fxl6408_set_direction(dev, offset, DIR_OUT);
+		fxl6408_set_value(dev, offset, value);
+	/* IO_DIR = IN */
+	} else if (flags & GPIOD_IS_IN) {
+		fxl6408_set_direction(dev, offset, DIR_IN);
+	}
+	/* Pull Up/Down */
+	if (flags & GPIOD_MASK_PULL) {
+		/* enable Pull Up/Down */
+		if (flags & GPIOD_PULL_UP)
+			/* set Pull Up */
+		else if (flags & GPIOD_PULL_DOWN)
+		/* set Pull Down */
+	}
+
+
+	return ret;
+}
+
 static const struct dm_gpio_ops fxl6408_ops = {
-	.direction_input        = fxl6408_direction_input,
-	.direction_output       = fxl6408_direction_output,
 	.get_value              = fxl6408_get_value,
 	.set_value              = fxl6408_set_value,
 	.get_function           = fxl6408_get_function,
 	.xlate                  = fxl6408_xlate,
+	.set_flags		= fxl6408_set_flags,
 };
 
 static int fxl6408_probe(struct udevice *dev)
