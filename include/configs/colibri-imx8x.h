@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0+ */
 /*
- * Copyright 2019 Toradex
+ * Copyright 2019-2021 Toradex
  */
 
 #ifndef __COLIBRI_IMX8X_H
@@ -69,8 +69,6 @@
 	func(DHCP, dhcp, na)
 #include <config_distro_bootcmd.h>
 
-#define FDT_FILE			"imx8qxp-colibri-eval-v3.dtb"
-
 #include <config_distro_bootcmd.h>
 
 #if defined(CONFIG_TDX_EASY_INSTALLER)
@@ -90,8 +88,8 @@
 	"bootcmd_mfg=fastboot 0\0" \
 	"console=ttyLP3,115200 earlycon=lpuart32,0x5a090000,115200\0" \
 	"fdt_addr=0x83000000\0"	\
-	"fdtfile=" FDT_FILE "\0" \
 	"fdt_high=\0" \
+	"fdt_board=eval-v3\0" \
 	"finduuid=part uuid mmc ${mmcdev}:2 uuid\0" \
 	"image=Image\0" \
 	"initrd_addr=0x83800000\0" \
