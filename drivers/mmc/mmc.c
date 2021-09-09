@@ -788,8 +788,10 @@ static int __mmc_switch(struct mmc *mmc, u8 set, u8 index, u8 value,
 	 * capable of polling by using mmc_wait_dat0, then rely on waiting the
 	 * stated timeout to be sufficient.
 	 */
-	if (ret == -ENOSYS && !send_status)
+	if (ret == -ENOSYS && !send_status) {
 		mdelay(timeout_ms);
+		return 0;
+	}
 
 	/* Finally wait until the card is ready or indicates a failure
 	 * to switch. It doesn't hurt to use CMD13 here even if send_status
@@ -800,11 +802,12 @@ static int __mmc_switch(struct mmc *mmc, u8 set, u8 index, u8 value,
 		ret = mmc_send_status(mmc, &status);
 
 		if (!ret && (status & MMC_STATUS_SWITCH_ERROR)) {
-			pr_debug("switch failed %d/%d/0x%x !\n", set, index,
+			pr_err("switch failed %d/%d/0x%x !\n", set, index,
 				 value);
 			return -EIO;
 		}
-		if (!ret && (status & MMC_STATUS_RDY_FOR_DATA))
+		if (!ret && (status & MMC_STATUS_RDY_FOR_DATA) &&
+		    (status & MMC_STATUS_CURR_STATE) == MMC_STATE_TRANS)
 			return 0;
 		udelay(100);
 	} while (get_timer(start) < timeout_ms);
