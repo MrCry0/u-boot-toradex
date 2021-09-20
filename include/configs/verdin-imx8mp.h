@@ -45,7 +45,7 @@
 /* ENET Config */
 /* ENET1 */
 #if defined(CONFIG_CMD_NET)
-#define CONFIG_ETHPRIME			"eth1" /* eqos is on-module Ethernet interface */
+#define CONFIG_ETHPRIME			"eth0" /* eqos is aliased on-module Ethernet interface */
 
 #define FEC_QUIRK_ENET_MAC
 

@@ -16,6 +16,9 @@
 		eeprom0 = &eeprom_module;
 		eeprom1 = &eeprom_carrier;
 		eeprom2 = &eeprom_mipi_dsi;
+		/* Ethernet aliases to ensure correct MAC addresses */
+		ethernet0 = &eqos;
+		ethernet1 = &fec;
 	};
 
 	chosen {
