@@ -352,15 +352,6 @@ static int _fastboot_setup_dev(int *switched)
 void fastboot_setup(void)
 {
 	int sw, ret;
-	struct tag_serialnr serialnr = {
-		.high = 0,
-		.low = 0,
-	};
-	char serial[17];
-
-	get_board_serial(&serialnr);
-	sprintf(serial, "%08x%08x", serialnr.high, serialnr.low);
-	env_set("serial#", serial);
 
 	/*execute board relevant initilizations for preparing fastboot */
 	board_fastboot_setup();
