@@ -111,7 +111,12 @@
 	"boot_scripts=" BOOT_SCRIPT "\0" \
 	"boot_script_dhcp=" BOOT_SCRIPT "\0" \
 	"boot_file=Image\0" \
-	"setup=setenv setupargs console=${console},${baudrate} console=tty1 consoleblank=0 earlycon\0"
+	"setup=setenv setupargs console=${console},${baudrate} console=tty1 consoleblank=0 earlycon\0" \
+	"update_uboot=askenv confirm Did you load imx-boot (y/N)?; " \
+		"if test \"$confirm\" = \"y\"; then " \
+		"setexpr blkcnt ${filesize} + 0x1ff && setexpr blkcnt " \
+		"${blkcnt} / 0x200; mmc dev 0 1; mmc write ${loadaddr} 0x2 " \
+		"${blkcnt}; fi\0"
 
 #define CONFIG_SYS_INIT_RAM_ADDR	0x40000000
 #define CONFIG_SYS_INIT_RAM_SIZE	0x80000
