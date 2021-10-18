@@ -174,26 +174,14 @@ static void init_gpio_expander(void)
 
 static void select_dt_from_module_version(void)
 {
-        switch (tdx_hw_tag.prodid) {
-                /* Select Colibri iMX8QXP device trees */
-                case COLIBRI_IMX8QXP_WIFI_BT_IT:
-                case COLIBRI_IMX8QXP_IT:
-                        env_set("soc", "imx8qxp");
-                        break;
-
-                /* Select Colibri iMX8DX device trees */
-                case COLIBRI_IMX8DX_WIFI_BT:
-                case COLIBRI_IMX8DX:
-                        env_set("soc", "imx8dx");
-                        break;
-        default:
-                printf("Unknown Colibri iMX8x module\n");
-                return;
-        }
-
-#ifndef CONFIG_ENV_IS_NOWHERE
-        env_save();
-#endif
+	/*
+	 * The dtb filename is constructed from ${soc}-colibri-${fdt_board}.dtb.
+	 * Set soc depending on the used SoC.
+	 */
+	if (is_imx8dx())
+		env_set("soc", "imx8dx");
+	else
+		env_set("soc", "imx8qxp");
 }
 
 int board_init(void)
