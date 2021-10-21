@@ -184,6 +184,17 @@ static void select_dt_from_module_version(void)
 		env_set("soc", "imx8qxp");
 }
 
+static int do_select_dt_from_module_version(cmd_tbl_t *cmdtp, int flag, int argc,
+		       char * const argv[]) {
+	select_dt_from_module_version();
+	return 0;
+}
+
+U_BOOT_CMD(
+	select_dt_from_module_version, CONFIG_SYS_MAXARGS, 1, do_select_dt_from_module_version,
+	"\n", "    - select devicetree from module version"
+);
+
 int board_init(void)
 {
 	init_gpio_expander();
