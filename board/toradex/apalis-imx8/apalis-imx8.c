@@ -241,10 +241,6 @@ static void select_dt_from_module_version(void)
 		printf("Unknown Apalis iMX8 module\n");
 		return;
 	}
-
-#ifndef CONFIG_ENV_IS_NOWHERE
-	env_save();
-#endif
 }
 
 static int do_select_dt_from_module_version(cmd_tbl_t *cmdtp, int flag, int argc,
