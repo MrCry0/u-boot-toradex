@@ -356,9 +356,6 @@ static void select_dt_from_module_version(void)
 	if (strcmp(variant, env_variant)) {
 		printf("Setting variant to %s\n", variant);
 		env_set("variant", variant);
-#ifndef CONFIG_ENV_IS_NOWHERE
-		env_save();
-#endif
 	}
 }
 
